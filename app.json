@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "GlouGlou",
+    "slug": "glouglou-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "glouglou",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.glouglou.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F7F3EE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png"
+      },
+      "package": "com.glouglou.app",
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
