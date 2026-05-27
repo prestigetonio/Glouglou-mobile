@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function ProfileScreen() {
@@ -50,7 +51,9 @@ export default function ProfileScreen() {
             alignItems: 'center',
             marginBottom: 12,
           }}>
-            <Text style={{ fontSize: 36 }}>👤</Text>
+            <Svg width={40} height={40} viewBox="0 0 16 16" fill="#9E9189">
+              <Path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+            </Svg>
           </View>
           <Text style={{ fontSize: 20, color: '#1C1410', fontFamily: 'CormorantGaramond_600SemiBold', fontWeight: '600' }}>
             {user.name}

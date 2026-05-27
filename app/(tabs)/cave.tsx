@@ -126,14 +126,14 @@ export default function CaveScreen() {
         data={FILTERS}
         keyExtractor={(f) => f}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20, gap: 8, paddingBottom: 10 }}
+        contentContainerStyle={{ paddingHorizontal: 20, gap: 8, paddingBottom: 36 }}
         renderItem={({ item: f }) => {
           const active = activeFilter === f;
           return (
             <Pressable
               onPress={() => setActiveFilter(f)}
               style={{
-                height: 22,
+                height: 36,
                 paddingHorizontal: 14,
                 borderRadius: 20,
                 backgroundColor: active ? '#7A1515' : '#FFFFFF',

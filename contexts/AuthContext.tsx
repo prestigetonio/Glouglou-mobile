@@ -9,6 +9,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  saveSession: (token: string, apiUser: { id: string; email: string; name: string; plan: string }) => Promise<void>;
   signOut: () => Promise<void>;
   updateUserPlan: (plan: 'free' | 'premium') => void;
 }
@@ -50,6 +51,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(u);
   }
 
+  async function saveSession(token: string, apiUser: { id: string; email: string; name: string; plan: string }) {
+    const u: User = {
+      id: apiUser.id,
+      email: apiUser.email,
+      name: apiUser.name,
+      plan: apiUser.plan as 'free' | 'premium',
+    };
+    await saveToken(token);
+    await SecureStore.setItemAsync(USER_KEY, JSON.stringify(u));
+    setUser(u);
+  }
+
   async function signOut() {
     await removeToken();
     await SecureStore.deleteItemAsync(USER_KEY);
@@ -64,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, signIn, signOut, updateUserPlan }}>
+    <AuthContext.Provider value={{ user, isLoading, signIn, saveSession, signOut, updateUserPlan }}>
       {children}
     </AuthContext.Provider>
   );

@@ -13,21 +13,20 @@ export default function BottleCard({ bottle }: Props) {
   return (
     <Pressable
       onPress={() => router.push(`/bottle/${bottle.id}`)}
-      style={({ pressed }) => ({
+      style={{ marginBottom: 12 }}
+    >
+      <View style={{
         backgroundColor: '#FFFFFF',
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#C8BAA8',
+        borderColor: '#E2D9CE',
         padding: 16,
-        marginBottom: 12,
-        opacity: pressed ? 0.9 : 1,
         shadowColor: '#3C2814',
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.07,
+        shadowOpacity: 0.06,
         shadowRadius: 4,
         elevation: 2,
-      })}
-    >
+      }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
         <WineTypeBadge type={bottle.type} />
         {bottle.quantity > 1 && (
@@ -64,6 +63,7 @@ export default function BottleCard({ bottle }: Props) {
           <View />
         )}
         <StarRating value={bottle.rating} readonly size="sm" />
+      </View>
       </View>
     </Pressable>
   );

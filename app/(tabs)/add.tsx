@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BottleForm from '@/components/BottleForm';
@@ -10,6 +10,13 @@ import { BottleFormData } from '@/lib/types';
 export default function AddScreen() {
   const router = useRouter();
   const [showPremium, setShowPremium] = useState(false);
+  const [formKey, setFormKey] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      setFormKey((k) => k + 1);
+    }, [])
+  );
 
   async function handleSubmit(data: BottleFormData) {
     try {
@@ -34,6 +41,7 @@ export default function AddScreen() {
       </View>
 
       <BottleForm
+        key={formKey}
         onSubmit={handleSubmit}
         onCancel={() => router.replace('/(tabs)/cave')}
         submitLabel="Ajouter à la cave"

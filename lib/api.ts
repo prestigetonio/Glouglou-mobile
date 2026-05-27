@@ -35,6 +35,17 @@ export async function apiSignIn(email: string, password: string) {
   return data as { token: string; user: { id: string; email: string; name: string; plan: string } };
 }
 
+export async function apiGoogleSignIn(accessToken: string) {
+  const res = await fetch(`${BASE_URL}/api/auth/mobile/google`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ accessToken }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Connexion Google échouée');
+  return data as { token: string; user: { id: string; email: string; name: string; plan: string } };
+}
+
 export async function apiRegister(
   firstName: string,
   lastName: string,
