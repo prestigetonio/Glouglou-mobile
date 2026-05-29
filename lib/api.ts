@@ -130,6 +130,19 @@ export async function apiUpdateBottle(id: number, form: BottleFormData) {
   return data as Bottle;
 }
 
+export async function apiUpdatePlan(plan: 'free' | 'premium'): Promise<void> {
+  const headers = await authHeaders();
+  const res = await fetch(`${BASE_URL}/api/auth/mobile/update-plan`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ plan }),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || 'Erreur mise à jour du plan');
+  }
+}
+
 export async function apiDeleteBottle(id: number): Promise<void> {
   const headers = await authHeaders();
   const res = await fetch(`${BASE_URL}/api/bottles/${id}`, {

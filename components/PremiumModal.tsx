@@ -1,6 +1,8 @@
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, Text, View } from 'react-native';
+import Purchases from 'react-native-purchases';
+import { useAuth } from '@/contexts/AuthContext';
+import { apiUpdatePlan } from '@/lib/api';
 
 interface Props {
   visible: boolean;
@@ -8,11 +10,33 @@ interface Props {
 }
 
 export default function PremiumModal({ visible, onClose }: Props) {
-  const router = useRouter();
+  const { updateUserPlan } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  function handleUpgrade() {
-    onClose();
-    router.push('/(tabs)/profile');
+  async function handleUpgrade() {
+    setLoading(true);
+    try {
+      const offerings = await Purchases.getOfferings();
+      const monthly = offerings.current?.monthly;
+      if (!monthly) {
+        Alert.alert('Erreur', 'Offre introuvable. Réessayez plus tard.');
+        return;
+      }
+      const { customerInfo } = await Purchases.purchasePackage(monthly);
+      if (customerInfo.entitlements.active['GlouGlou Pro']) {
+        await apiUpdatePlan('premium');
+        updateUserPlan('premium');
+        onClose();
+        Alert.alert('Bienvenue Premium !', 'Votre cave est maintenant illimitée. 🍷');
+      }
+    } catch (e: unknown) {
+      const err = e as { userCancelled?: boolean; message?: string };
+      if (!err.userCancelled) {
+        Alert.alert('Erreur', err.message || "L'achat a échoué. Réessayez.");
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -68,7 +92,7 @@ export default function PremiumModal({ visible, onClose }: Props) {
 
           {/* Boutons fixes en bas */}
           <View style={{ paddingHorizontal: 28, paddingBottom: 40, paddingTop: 16, gap: 8 }}>
-            <Pressable onPress={handleUpgrade}>
+            <Pressable onPress={handleUpgrade} disabled={loading}>
               <View style={{
                 backgroundColor: '#7A1515',
                 borderRadius: 12,
@@ -77,11 +101,18 @@ export default function PremiumModal({ visible, onClose }: Props) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
+                opacity: loading ? 0.7 : 1,
               }}>
-                <Text style={{ fontSize: 16 }}>✨</Text>
-                <Text style={{ color: '#FFFFFF', fontSize: 16, fontFamily: 'Inter_600SemiBold' }}>
-                  Passer à Premium
-                </Text>
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <>
+                    <Text style={{ fontSize: 16 }}>✨</Text>
+                    <Text style={{ color: '#FFFFFF', fontSize: 16, fontFamily: 'Inter_600SemiBold' }}>
+                      Passer à Premium
+                    </Text>
+                  </>
+                )}
               </View>
             </Pressable>
 

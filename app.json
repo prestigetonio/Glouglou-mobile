@@ -9,7 +9,10 @@
     "scheme": "glouglou",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.glouglou.app"
+      "bundleIdentifier": "com.glouglou.mobile",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +34,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "59188024-fe1e-48b1-ba88-7ce835858fc0"
+      }
     }
   }
 }

@@ -16,12 +16,19 @@ import {
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, Platform, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Purchases from 'react-native-purchases';
 import { AuthProvider } from '@/contexts/AuthContext';
 
 export default function RootLayout() {
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY! });
+    }
+  }, []);
+
   const [fontsLoaded] = useFonts({
     CormorantGaramond_400Regular,
     CormorantGaramond_400Regular_Italic,

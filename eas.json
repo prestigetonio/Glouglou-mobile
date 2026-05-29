@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 19.1.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "325410474756-7nbc1et5993tbsntc8a1p1fr575tj2m0.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "325410474756-aefu0despldkrpbf7dq4furv5qinmg4v.apps.googleusercontent.com",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_bWpesUsEbVggUJzYMfNMHZqvrVO"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

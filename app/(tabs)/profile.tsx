@@ -1,13 +1,41 @@
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Alert, Pressable, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
+import Purchases from 'react-native-purchases';
 import { useAuth } from '@/contexts/AuthContext';
+import { apiUpdatePlan } from '@/lib/api';
 
 export default function ProfileScreen() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, updateUserPlan } = useAuth();
   const router = useRouter();
+  const [purchaseLoading, setPurchaseLoading] = useState(false);
+
+  async function handleUpgrade() {
+    setPurchaseLoading(true);
+    try {
+      const offerings = await Purchases.getOfferings();
+      const monthly = offerings.current?.monthly;
+      if (!monthly) {
+        Alert.alert('Erreur', 'Offre introuvable. Réessayez plus tard.');
+        return;
+      }
+      const { customerInfo } = await Purchases.purchasePackage(monthly);
+      if (customerInfo.entitlements.active['GlouGlou Pro']) {
+        await apiUpdatePlan('premium');
+        updateUserPlan('premium');
+        Alert.alert('Bienvenue Premium !', 'Votre cave est maintenant illimitée. 🍷');
+      }
+    } catch (e: unknown) {
+      const err = e as { userCancelled?: boolean; message?: string };
+      if (!err.userCancelled) {
+        Alert.alert('Erreur', err.message || "L'achat a échoué. Réessayez.");
+      }
+    } finally {
+      setPurchaseLoading(false);
+    }
+  }
 
   async function handleSignOut() {
     Alert.alert(
@@ -82,11 +110,14 @@ export default function ProfileScreen() {
               </Text>
             </View>
             {!isPremium && (
-              <View style={{ backgroundColor: '#7A1515', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6 }}>
-                <Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: '700', fontFamily: 'Inter_600SemiBold' }}>
-                  Passer Premium
-                </Text>
-              </View>
+              <Pressable onPress={handleUpgrade} disabled={purchaseLoading}>
+                <View style={{ backgroundColor: '#7A1515', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6, opacity: purchaseLoading ? 0.7 : 1 }}>
+                  {purchaseLoading
+                    ? <ActivityIndicator color="#FFFFFF" size="small" />
+                    : <Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: '700', fontFamily: 'Inter_600SemiBold' }}>Passer Premium</Text>
+                  }
+                </View>
+              </Pressable>
             )}
           </View>
           {!isPremium && (
