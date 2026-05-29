@@ -3,6 +3,6 @@ import React from 'react';
 
 export default function AuthLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#F7F3EE' }, animation: 'none' }} />
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#F7F3EE' }, animation: 'none', gestureEnabled: false }} />
   );
 }

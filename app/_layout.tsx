@@ -25,7 +25,9 @@ import { AuthProvider } from '@/contexts/AuthContext';
 export default function RootLayout() {
   useEffect(() => {
     if (Platform.OS === 'ios') {
-      Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY! });
+      try {
+        Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY! });
+      } catch {}
     }
   }, []);
 

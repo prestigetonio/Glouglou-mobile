@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import StarRating from '@/components/StarRating';
 import WineTypeBadge from '@/components/WineTypeBadge';
 import { apiDeleteBottle, apiGetBottle } from '@/lib/api';
+import { getAgingInfo } from '@/lib/aging';
 import { Bottle } from '@/lib/types';
 
 export default function BottleDetailScreen() {
@@ -77,7 +78,7 @@ export default function BottleDetailScreen() {
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
         {/* Retour */}
         <Pressable
-          onPress={() => router.back()}
+          onPress={() => router.replace('/(tabs)/cave')}
           style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20, gap: 6 }}
         >
           <Text style={{ fontSize: 18, color: '#7A1515' }}>←</Text>
@@ -94,6 +95,40 @@ export default function BottleDetailScreen() {
         <Text style={{ fontSize: 16, color: '#7A6E65', fontFamily: 'Inter_400Regular', marginBottom: 20 }}>
           {bottle.domain}
         </Text>
+
+        {/* État de vieillissement */}
+        {(() => {
+          const aging = getAgingInfo(bottle);
+          if (!aging) return null;
+          return (
+            <View style={{
+              backgroundColor: aging.bgColor,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: aging.color + '40',
+              padding: 14,
+              marginBottom: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 12,
+            }}>
+              <View style={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                backgroundColor: aging.color,
+              }} />
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 15, fontFamily: 'Inter_600SemiBold', color: aging.color }}>
+                  {aging.label}
+                </Text>
+                <Text style={{ fontSize: 13, color: '#7A6E65', fontFamily: 'Inter_400Regular', marginTop: 2 }}>
+                  {aging.sublabel}
+                </Text>
+              </View>
+            </View>
+          );
+        })()}
 
         {/* Note */}
         {bottle.rating && (

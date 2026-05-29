@@ -8,6 +8,7 @@ export default function BottleLayout() {
         headerShown: false,
         contentStyle: { backgroundColor: '#F7F3EE' },
         animation: 'slide_from_right',
+        gestureEnabled: false,
       }}
     />
   );
