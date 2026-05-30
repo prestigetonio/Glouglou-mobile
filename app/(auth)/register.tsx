@@ -33,8 +33,8 @@ export default function RegisterScreen() {
   const [error, setError] = useState<string | null>(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
     clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
-    redirectUri: 'https://auth.expo.io/@glouglou-mobile/glouglou-mobile',
   });
 
   useEffect(() => {

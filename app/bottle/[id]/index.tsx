@@ -77,12 +77,12 @@ export default function BottleDetailScreen() {
   const aging = getAgingInfo(bottle);
 
   const GRADIENT_COLOR: Record<WineType, string> = {
-    Rouge: 'rgba(245,218,218,1.0)',
-    Blanc: 'rgba(245,233,200,1.0)',
-    Rosé: 'rgba(247,214,232,1.0)',
-    Champagne: 'rgba(242,228,186,1.0)',
-    Spiritueux: 'rgba(237,217,200,1.0)',
-    Autre: 'rgba(226,228,232,1.0)',
+    Rouge: 'rgba(210,30,30,0.18)',
+    Blanc: 'rgba(107,68,0,0.18)',
+    Rosé: 'rgba(157,21,85,0.18)',
+    Champagne: 'rgba(122,85,0,0.18)',
+    Spiritueux: 'rgba(92,42,14,0.18)',
+    Autre: 'rgba(61,65,73,0.18)',
   };
 
   return (
@@ -99,22 +99,13 @@ export default function BottleDetailScreen() {
 
         {/* Séparateur double trait avec fondu */}
         <View style={{ marginTop: 0, marginBottom: 20, marginHorizontal: -20 }}>
-          <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} />
+          {/* <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} /> */}
           <LinearGradient
-            colors={['rgba(247,243,238,0)', GRADIENT_COLOR[bottle.type as WineType] ?? 'rgba(245,218,218,1.0)']}
-            locations={[0, 0.5]}
+            colors={['rgba(255, 136, 136, 0.01)', 'rgba(255, 0, 0, 0.06)','rgba(187, 34, 34, 0.34)', 'rgba(180, 28, 28, 0.64)', 'rgba(121, 0, 0, 0.76)']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
-            style={{ height: 140 }}
+            style={{ height: 160 }}
           />
-          <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} />
-          <LinearGradient
-            colors={[GRADIENT_COLOR[bottle.type as WineType] ?? 'rgba(245,218,218,1.0)', 'rgba(247,243,238,0)']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={{ height: 8 }}
-          />
-          <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} />
         </View>
 
         {/* Nom */}
