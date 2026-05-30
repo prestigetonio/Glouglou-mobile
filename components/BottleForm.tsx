@@ -245,23 +245,19 @@ export default function BottleForm({ initial, onSubmit, onCancel, submitLabel = 
         <View style={{ flexDirection: 'row', gap: 10, marginTop: 8 }}>
           <Pressable
             onPress={onCancel}
-            style={{ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: '#C8BAA8', alignItems: 'center' }}
+            style={{ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: '#C8BAA8', alignItems: 'center', justifyContent: 'center' }}
           >
             <Text style={{ color: '#7A6E65', fontSize: 15, fontWeight: '500' }}>Annuler</Text>
           </Pressable>
-          <Pressable onPress={handleSubmit} disabled={loading} style={{ flex: 2 }}>
-            <View style={{
-              padding: 14,
-              borderRadius: 10,
-              backgroundColor: '#7A1515',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              {loading
-                ? <ActivityIndicator color="#FFF" size="small" />
-                : <Text style={{ color: '#FFFFFF', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>{submitLabel}</Text>
-              }
-            </View>
+          <Pressable
+            onPress={handleSubmit}
+            disabled={loading}
+            style={{ flex: 2, padding: 14, borderRadius: 10, backgroundColor: '#7A1515', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {loading
+              ? <ActivityIndicator color="#FFF" size="small" />
+              : <Text style={{ color: '#FFFFFF', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>{submitLabel}</Text>
+            }
           </Pressable>
         </View>
       </ScrollView>

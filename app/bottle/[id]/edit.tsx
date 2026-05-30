@@ -67,7 +67,7 @@ export default function EditBottleScreen() {
         initial={bottle}
         onSubmit={handleSubmit}
         onCancel={() => router.back()}
-        submitLabel="Enregistrer les modifications"
+        submitLabel="Enregistrer"
       />
 
       <PremiumModal visible={showPremium} onClose={() => setShowPremium(false)} />

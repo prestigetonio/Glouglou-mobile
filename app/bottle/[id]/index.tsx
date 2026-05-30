@@ -96,6 +96,13 @@ export default function BottleDetailScreen() {
           {bottle.domain}
         </Text>
 
+        {/* Note */}
+        {bottle.rating && (
+          <View style={{ marginBottom: 20 }}>
+            <StarRating value={bottle.rating} readonly size="lg" />
+          </View>
+        )}
+
         {/* État de vieillissement */}
         {(() => {
           const aging = getAgingInfo(bottle);
@@ -130,13 +137,6 @@ export default function BottleDetailScreen() {
           );
         })()}
 
-        {/* Note */}
-        {bottle.rating && (
-          <View style={{ marginBottom: 20 }}>
-            <StarRating value={bottle.rating} readonly size="lg" />
-          </View>
-        )}
-
         {/* Infos */}
         <View style={{ backgroundColor: '#FFFFFF', borderRadius: 12, borderWidth: 1, borderColor: '#C8BAA8', overflow: 'hidden', marginBottom: 20 }}>
           {bottle.vintage && <DetailRow label="Millésime" value={String(bottle.vintage)} />}
@@ -167,43 +167,37 @@ export default function BottleDetailScreen() {
 
         {/* Actions */}
         <View style={{ flexDirection: 'row', gap: 10 }}>
-          <Pressable
-            onPress={() => router.push(`/bottle/${bottle.id}/edit`)}
-            style={({ pressed }) => ({
-              flex: 1,
-              backgroundColor: '#F2EDE6',
+          <Pressable onPress={() => router.push(`/bottle/${bottle.id}/edit`)} style={{ flex: 1 }}>
+            <View style={{
+              backgroundColor: '#7A1515',
               borderRadius: 12,
-              borderWidth: 1,
-              borderColor: '#C8BAA8',
-              padding: 14,
+              paddingVertical: 14,
               alignItems: 'center',
-              opacity: pressed ? 0.8 : 1,
-            })}
-          >
-            <Text style={{ color: '#1C1410', fontSize: 15, fontWeight: '600', fontFamily: 'Inter_600SemiBold' }}>
-              ✏️ Modifier
-            </Text>
+              justifyContent: 'center',
+            }}>
+              <Text style={{ color: '#FFFFFF', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>
+                Modifier
+              </Text>
+            </View>
           </Pressable>
 
-          <Pressable
-            onPress={handleDelete}
-            disabled={deleting}
-            style={({ pressed }) => ({
-              flex: 1,
-              backgroundColor: pressed || deleting ? '#F5DADA' : '#FFFFFF',
+          <Pressable onPress={handleDelete} disabled={deleting} style={{ flex: 1 }}>
+            <View style={{
+              backgroundColor: '#FFFFFF',
               borderRadius: 12,
-              borderWidth: 1,
-              borderColor: '#F5DADA',
-              padding: 14,
+              paddingVertical: 14,
               alignItems: 'center',
-            })}
-          >
-            {deleting
-              ? <ActivityIndicator size="small" color="#7A1515" />
-              : <Text style={{ color: '#7A1515', fontSize: 15, fontWeight: '600', fontFamily: 'Inter_600SemiBold' }}>
-                  🗑️ Supprimer
-                </Text>
-            }
+              justifyContent: 'center',
+              borderWidth: 1,
+              borderColor: '#C8BAA8',
+            }}>
+              {deleting
+                ? <ActivityIndicator size="small" color="#7A1515" />
+                : <Text style={{ color: '#991B1B', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>
+                    Supprimer
+                  </Text>
+              }
+            </View>
           </Pressable>
         </View>
       </ScrollView>
