@@ -9,11 +9,12 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import StarRating from '@/components/StarRating';
 import WineTypeBadge from '@/components/WineTypeBadge';
 import { apiDeleteBottle, apiGetBottle } from '@/lib/api';
 import { getAgingInfo } from '@/lib/aging';
-import { Bottle } from '@/lib/types';
+import { Bottle, WineType, WINE_TYPE_CONFIG } from '@/lib/types';
 
 export default function BottleDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -73,6 +74,17 @@ export default function BottleDetailScreen() {
     );
   }
 
+  const aging = getAgingInfo(bottle);
+
+  const GRADIENT_COLOR: Record<WineType, string> = {
+    Rouge: 'rgba(245,218,218,1.0)',
+    Blanc: 'rgba(245,233,200,1.0)',
+    Rosé: 'rgba(247,214,232,1.0)',
+    Champagne: 'rgba(242,228,186,1.0)',
+    Spiritueux: 'rgba(237,217,200,1.0)',
+    Autre: 'rgba(226,228,232,1.0)',
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F7F3EE' }} edges={['top']}>
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
@@ -85,11 +97,28 @@ export default function BottleDetailScreen() {
           <Text style={{ color: '#7A1515', fontSize: 14, fontFamily: 'Inter_500Medium' }}>Ma Cave</Text>
         </Pressable>
 
-        {/* Badge type */}
-        <WineTypeBadge type={bottle.type} />
+        {/* Séparateur double trait avec fondu */}
+        <View style={{ marginTop: 0, marginBottom: 20, marginHorizontal: -20 }}>
+          <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} />
+          <LinearGradient
+            colors={['rgba(247,243,238,0)', GRADIENT_COLOR[bottle.type as WineType] ?? 'rgba(245,218,218,1.0)']}
+            locations={[0, 0.5]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ height: 140 }}
+          />
+          <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} />
+          <LinearGradient
+            colors={[GRADIENT_COLOR[bottle.type as WineType] ?? 'rgba(245,218,218,1.0)', 'rgba(247,243,238,0)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ height: 8 }}
+          />
+          <View style={{ height: 1, backgroundColor: 'rgba(28,20,16,0.12)' }} />
+        </View>
 
         {/* Nom */}
-        <Text style={{ fontSize: 32, color: '#1C1410', fontFamily: 'CormorantGaramond_700Bold', marginTop: 12, marginBottom: 4, lineHeight: 38 }}>
+        <Text style={{ fontSize: 32, color: '#1C1410', fontFamily: 'CormorantGaramond_700Bold', marginBottom: 4, lineHeight: 38 }}>
           {bottle.name}
         </Text>
         <Text style={{ fontSize: 16, color: '#7A6E65', fontFamily: 'Inter_400Regular', marginBottom: 20 }}>
@@ -104,38 +133,29 @@ export default function BottleDetailScreen() {
         )}
 
         {/* État de vieillissement */}
-        {(() => {
-          const aging = getAgingInfo(bottle);
-          if (!aging) return null;
-          return (
-            <View style={{
-              backgroundColor: aging.bgColor,
-              borderRadius: 12,
-              borderWidth: 1,
-              borderColor: aging.color + '40',
-              padding: 14,
-              marginBottom: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 12,
-            }}>
-              <View style={{
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                backgroundColor: aging.color,
-              }} />
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Inter_600SemiBold', color: aging.color }}>
-                  {aging.label}
-                </Text>
-                <Text style={{ fontSize: 13, color: '#7A6E65', fontFamily: 'Inter_400Regular', marginTop: 2 }}>
-                  {aging.sublabel}
-                </Text>
-              </View>
+        {aging && (
+          <View style={{
+            backgroundColor: aging.bgColor,
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: aging.color + '40',
+            padding: 14,
+            marginBottom: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+          }}>
+            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: aging.color }} />
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontSize: 15, fontFamily: 'Inter_600SemiBold', color: aging.color }}>
+                {aging.label}
+              </Text>
+              <Text style={{ fontSize: 13, color: '#7A6E65', fontFamily: 'Inter_400Regular', marginTop: 2 }}>
+                {aging.sublabel}
+              </Text>
             </View>
-          );
-        })()}
+          </View>
+        )}
 
         {/* Infos */}
         <View style={{ backgroundColor: '#FFFFFF', borderRadius: 12, borderWidth: 1, borderColor: '#C8BAA8', overflow: 'hidden', marginBottom: 20 }}>
@@ -168,34 +188,16 @@ export default function BottleDetailScreen() {
         {/* Actions */}
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Pressable onPress={() => router.push(`/bottle/${bottle.id}/edit`)} style={{ flex: 1 }}>
-            <View style={{
-              backgroundColor: '#7A1515',
-              borderRadius: 12,
-              paddingVertical: 14,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <Text style={{ color: '#FFFFFF', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>
-                Modifier
-              </Text>
+            <View style={{ backgroundColor: '#7A1515', borderRadius: 12, paddingVertical: 14, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ color: '#FFFFFF', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>Modifier</Text>
             </View>
           </Pressable>
 
           <Pressable onPress={handleDelete} disabled={deleting} style={{ flex: 1 }}>
-            <View style={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: 12,
-              paddingVertical: 14,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              borderColor: '#C8BAA8',
-            }}>
+            <View style={{ backgroundColor: '#FFFFFF', borderRadius: 12, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#C8BAA8' }}>
               {deleting
                 ? <ActivityIndicator size="small" color="#7A1515" />
-                : <Text style={{ color: '#991B1B', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>
-                    Supprimer
-                  </Text>
+                : <Text style={{ color: '#991B1B', fontSize: 15, fontFamily: 'Inter_600SemiBold' }}>Supprimer</Text>
               }
             </View>
           </Pressable>
@@ -205,25 +207,15 @@ export default function BottleDetailScreen() {
   );
 }
 
-function DetailRow({
-  label,
-  value,
-  divider = false,
-  valueStyle = {},
-}: {
-  label: string;
-  value: string;
-  divider?: boolean;
-  valueStyle?: object;
+function DetailRow({ label, value, divider = false, valueStyle = {} }: {
+  label: string; value: string; divider?: boolean; valueStyle?: object;
 }) {
   return (
     <>
       {divider && <View style={{ height: 1, backgroundColor: '#F2EDE6' }} />}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ fontSize: 14, color: '#7A6E65', fontFamily: 'Inter_400Regular' }}>{label}</Text>
-        <Text style={{ fontSize: 14, color: '#1C1410', fontWeight: '600', fontFamily: 'Inter_600SemiBold', ...valueStyle }}>
-          {value}
-        </Text>
+        <Text style={{ fontSize: 14, color: '#1C1410', fontWeight: '600', fontFamily: 'Inter_600SemiBold', ...valueStyle }}>{value}</Text>
       </View>
     </>
   );
