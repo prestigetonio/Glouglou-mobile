@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import Purchases from 'react-native-purchases';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiUpdatePlan } from '@/lib/api';
@@ -65,7 +65,11 @@ export default function PremiumModal({ visible, onClose }: Props) {
             showsVerticalScrollIndicator={false}
           >
             <View style={{ alignItems: 'center', marginBottom: 20 }}>
-              <Text style={{ fontSize: 40, marginBottom: 8 }}>🍷</Text>
+              <Image
+                source={require('@/assets/gold_drink.png')}
+                style={{ width: 56, height: 56, marginBottom: 8 }}
+                resizeMode="contain"
+              />
               <Text style={{ fontSize: 26, fontWeight: '700', color: '#7A1515', textAlign: 'center', marginBottom: 6 }}>
                 Cave Premium
               </Text>

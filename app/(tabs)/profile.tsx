@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import Purchases from 'react-native-purchases';
@@ -105,9 +105,18 @@ export default function ProfileScreen() {
               <Text style={{ fontSize: 13, color: '#7A6E65', fontFamily: 'Inter_500Medium', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 2 }}>
                 Plan actuel
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: '700', color: isPremium ? '#A87C2A' : '#1C1410', fontFamily: isPremium ? 'CormorantGaramond_700Bold' : 'Inter_600SemiBold' }}>
-                {isPremium ? '✨ Premium' : 'Gratuit'}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                {isPremium && (
+                  <Image
+                    source={require('@/assets/gold_drink.png')}
+                    style={{ width: 28, height: 28 }}
+                    resizeMode="contain"
+                  />
+                )}
+                <Text style={{ fontSize: 24, fontWeight: '700', color: isPremium ? '#A87C2A' : '#1C1410', fontFamily: isPremium ? 'CormorantGaramond_700Bold' : 'Inter_600SemiBold' }}>
+                  {isPremium ? 'Premium' : 'Gratuit'}
+                </Text>
+              </View>
             </View>
             {!isPremium && (
               <Pressable onPress={handleUpgrade} disabled={purchaseLoading}>
